@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPO Key Metrics Analyzer BY LIKHITH</title>
+    
+    <!-- 
+      All styles are now included directly in this <style> block.
+      No external files or internet connection needed.
+    -->
+    <style>
+        /* Basic setup and font */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            background-color: #111827; /* bg-gray-900 */
+            color: #f3f4f6; /* text-gray-100 */
+            min-height: 100vh;
+            padding: 1rem;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding: 2rem;
+            }
+        }
+
+        /* Utility classes for number inputs */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        /* Page container */
+        .container {
+            max-width: 64rem; /* max-w-4xl */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            /* Gradient text effect */
+            background-image: linear-gradient(to right, #60a5fa, #a78bfa);
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        @media (min-width: 768px) {
+            header h1 {
+                font-size: 2.25rem; /* md:text-4xl */
+            }
+        }
+
+        header p {
+            color: #9ca3af; /* text-gray-400 */
+            margin-top: 0.5rem;
+        }
+
+        /* Layout for form and results */
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .content-wrapper {
+                flex-direction: row;
+            }
+            .input-section, .results-section {
+                width: 50%;
+            }
+        }
+
+        /* Card styling (for form and results) */
+        .card {
+            background-color: #1f2937; /* bg-gray-800 */
+            padding: 1.5rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); /* shadow-xl */
+            border: 1px solid #374151; /* border border-gray-700 */
+        }
+        
+        .results-section {
+            height: fit-content; /* Make results card align nicely */
+        }
+
+        /* Form elements */
+        h2 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* font-semibold */
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #4b5563; /* border-b border-gray-600 */
+            padding-bottom: 0.75rem;
+            margin-top: 0; /* Reset default h2 margin */
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem; /* space-y-4 */
+        }
+        
+        fieldset {
+            border: 1px solid #4b5563; /* border border-gray-600 */
+            padding: 1rem 1rem 1.5rem 1rem; /* p-4 */
+            border-radius: 0.5rem; /* rounded-lg */
+            margin-top: 0.5rem;
+        }
+        
+        fieldset > div {
+             display: flex;
+             flex-direction: column;
+             gap: 1rem; /* space-y-4 */
+             margin-top: 0.5rem; /* mt-2 */
+        }
+
+        legend {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 500; /* font-medium */
+            color: #93c5fd; /* text-blue-300 */
+            padding: 0 0.5rem; /* px-2 */
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+            color: #d1d5db; /* text-gray-300 */
+            margin-bottom: 0.25rem;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            display: block;
+            width: 100%;
+            box-sizing: border-box; /* Important for 100% width */
+            background-color: #374151; /* bg-gray-700 */
+            border: 1px solid #4b5563; /* border border-gray-600 */
+            border-radius: 0.375rem; /* rounded-md */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+            padding: 0.5rem 0.75rem; /* py-2 px-3 */
+            color: #ffffff; /* text-white */
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #3b82f6; /* focus:border-blue-500 */
+            box-shadow: 0 0 0 2px #1e40af; /* focus:ring-blue-500 */
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 1rem; /* space-x-4 */
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: 600; /* font-semibold */
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            flex-grow: 1; /* Make buttons share width */
+        }
+
+        .btn-primary {
+            background-color: #3b82f6; /* bg-blue-600 */
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb; /* hover:bg-blue-700 */
+        }
+        
+        .btn-secondary {
+            background-color: #4b5563; /* bg-gray-600 */
+            color: #e5e7eb; /* text-gray-200 */
+        }
+         .btn-secondary:hover {
+            background-color: #374151; /* hover:bg-gray-700 */
+        }
+        
+        /* Results Section */
+        #resultsMessage {
+            color: #9ca3af; /* text-gray-400 */
+            font-style: italic;
+        }
+        
+        #resultsList {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .result-item {
+            background-color: #374151; /* bg-gray-700 */
+            padding: 1rem;
+            border-radius: 0.5rem; /* rounded-lg */
+        }
+        
+        .result-label {
+            display: block;
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+            color: #9ca3af; /* text-gray-400 */
+        }
+        
+        .result-value {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            color: #ffffff; /* text-white */
+            margin-top: 0.25rem;
+            word-wrap: break-word; /* Ensure long numbers wrap */
+        }
+        
+        @media (min-width: 768px) {
+            .result-value {
+                font-size: 1.5rem; /* md:text-2xl */
+            }
+        }
+        
+        .result-formula {
+            font-size: 0.75rem; /* text-xs */
+            color: #6b7281; /* text-gray-500 */
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>IPO Key Metrics Analyzer BY LIKHITH</h1>
+            <p>
+                Enter data from an IPO Prospectus (like an RHP) to calculate key valuation metrics (MADE BY LIKHITH).
+            </p>
+        </header>
+
+        <!-- Main Content: Inputs and Results -->
+        <div class="content-wrapper">
+
+            <!-- Input Form -->
+            <div class="input-section card">
+                <h2 class="text-2xl font-semibold mb-6 border-b border-gray-600 pb-3">IPO Data Input</h2>
+                
+                <!-- The form now has an ID to be easily targeted by JavaScript -->
+                <form id="ipoForm">
+                    
+                    <div>
+                        <label for="companyName">Company Name</label>
+                        <input type="text" id="companyName" placeholder="e.g., Zomato">
+                    </div>
+
+                    <!-- Financials Section -->
+                    <fieldset>
+                        <legend>Financials (Post-IPO)</legend>
+                        <div>
+                            <div>
+                                <label for="issuePrice">Issue Price (per share)</label>
+                                <input type="number" id="issuePrice" placeholder="e.g., 76">
+                            </div>
+                            <div>
+                                <label for="totalShares">Total Shares (Post-Issue)</label>
+                                <input type="number" id="totalShares" placeholder="In Crores, e.g., 65.3">
+                            </div>
+                             <div>
+                                <label for="eps">Diluted EPS (TTM)</label>
+                                <input type="number" id="eps" placeholder="Trailing Twelve Months, e.g., 1.5">
+                            </div>
+                        </div>
+                    </fieldset>
+                    
+                    <!-- Issue Details Section (from screenshot) -->
+                    <fieldset>
+                        <legend>Issue Details</legend>
+                        <div>
+                            <div>
+                                <label for="totalIssueSize">Total Issue Size</label>
+                                <input type="number" id="totalIssueSize" placeholder="In Crores, e.g., 9375">
+                            </div>
+                            <div>
+                                <label for="retailQuota">Retail Quota (%)</label>
+                                <input type="number" id="retailQuota" placeholder="e.g., 10">
+                            </div>
+                        </div>
+                    </fieldset>
+                    
+                    <!-- Market Sentiment Section (from screenshot) -->
+                    <fieldset>
+                        <legend>Market Sentiment (Optional)</legend>
+                        <div>
+                            <div>
+                                <label for="gmp">Grey Market Premium (GMP)</label>
+                                <input type="number" id="gmp" placeholder="In Rupees, e.g., 89">
+                            </div>
+                        </div>
+                    </fieldset>
+                    
+                    <!-- Action Buttons -->
+                    <div class="button-group">
+                        <!-- Type "submit" will be caught by our JS -->
+                        <button type="submit" id="analyzeButton" class="btn btn-primary">Analyze</button>
+                        <!-- Type "button" to prevent form submission -->
+                        <button type="button" id="clearButton" class="btn btn-secondary">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section card">
+                <!-- Title will be updated by JS -->
+                <h2 id="resultsTitle">Analysis Results</h2>
+                
+                <!-- This message shows by default -->
+                <div id="resultsMessage">
+                    Please fill in the form and click "Analyze" to see the results.
+                </div>
+                
+                <!-- Results will be injected here -->
+                <div id="resultsList">
+                    <!-- Example of a result item (will be generated by JS) -->
+                    <!--
+                    <div class="result-item">
+                        <span class="result-label">Post-Issue Market Cap</span>
+                        <div class="result-value">₹4,27,310 Cr.</div>
+                        <div class="result-formula">(Total Shares * Issue Price)</div>
+                    </div>
+                    -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- JavaScript for calculations. Also self-contained! -->
+    <script>
+        // Wait for the document to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Get references to all our important elements
+            const ipoForm = document.getElementById('ipoForm');
+            const clearButton = document.getElementById('clearButton');
+            
+            const resultsTitle = document.getElementById('resultsTitle');
+            const resultsMessage = document.getElementById('resultsMessage');
+            const resultsList = document.getElementById('resultsList');
+
+            // --- Handle Form Submission (Analyze) ---
+            ipoForm.addEventListener('submit', (event) => {
+                // Stop the form from reloading the page
+                event.preventDefault(); 
+                
+                // Get values from the form
+                const companyName = document.getElementById('companyName').value || "This IPO";
+                const issuePrice = parseFloat(document.getElementById('issuePrice').value);
+                const totalShares = parseFloat(document.getElementById('totalShares').value);
+                const eps = parseFloat(document.getElementById('eps').value);
+                const gmp = parseFloat(document.getElementById('gmp').value);
+                
+                // Clear previous results
+                resultsList.innerHTML = '';
+                
+                // Update the title
+                resultsTitle.textContent = `Analysis Results for ${companyName}`;
+
+                let resultsFound = false;
+                
+                // --- Calculation 1: Market Cap ---
+                if (!isNaN(issuePrice) && !isNaN(totalShares)) {
+                    resultsFound = true;
+                    const marketCap = issuePrice * totalShares;
+                    
+                    const resultHtml = `
+                        <div class="result-item">
+                            <span class="result-label">Post-Issue Market Cap</span>
+                            <div class="result-value">₹${marketCap.toLocaleString('en-IN', { maximumFractionDigits: 2 })} Cr.</div>
+                            <div class="result-formula">(${totalShares.toLocaleString('en-IN')} Cr. Shares * ₹${issuePrice.toLocaleString('en-IN')})</div>
+                        </div>
+                    `;
+                    resultsList.insertAdjacentHTML('beforeend', resultHtml);
+                }
+                
+                // --- Calculation 2: Price-to-Earnings (P/E) Ratio ---
+                if (!isNaN(issuePrice) && !isNaN(eps) && eps !== 0) {
+                    resultsFound = true;
+                    const peRatio = issuePrice / eps;
+                    
+                    const resultHtml = `
+                        <div class="result-item">
+                            <span class="result-label">Price-to-Earnings (P/E)</span>
+                            <div class="result-value">${peRatio.toFixed(2)}</div>
+                            <div class="result-formula">(₹${issuePrice.toLocaleString('en-IN')} Issue Price / ₹${eps.toLocaleString('en-IN')} EPS)</div>
+                        </div>
+                    `;
+                    resultsList.insertAdjacentHTML('beforeend', resultHtml);
+                } else if (!isNaN(issuePrice) && eps === 0) {
+                     resultsFound = true;
+                     const resultHtml = `
+                        <div class="result-item">
+                            <span class="result-label">Price-to-Earnings (P/E)</span>
+                            <div class="result-value">N/A</div>
+                            <div class="result-formula">EPS is zero, so P/E is undefined.</div>
+                        </div>
+                    `;
+                    resultsList.insertAdjacentHTML('beforeend', resultHtml);
+                }
+                
+                 // --- Calculation 3: Listing Gain (Optional) ---
+                if (!isNaN(issuePrice) && !isNaN(gmp) && gmp !== 0) {
+                    resultsFound = true;
+                    const listingGain = (gmp / issuePrice) * 100;
+                    const listingPrice = issuePrice + gmp;
+                    
+                    const resultHtml = `
+                        <div class="result-item">
+                            <span class="result-label">Est. Listing Gain (based on GMP)</span>
+                            <div class="result-value">${listingGain.toFixed(2)}%</div>
+                            <div class="result-formula">Est. Listing Price: ₹${listingPrice.toFixed(2)}</div>
+                        </div>
+                    `;
+                    resultsList.insertAdjacentHTML('beforeend', resultHtml);
+                }
+
+                // --- Show/Hide Placeholder Message ---
+                if (resultsFound) {
+                    resultsMessage.style.display = 'none';
+                } else {
+                    resultsMessage.style.display = 'block';
+                    resultsMessage.textContent = 'Please enter at least "Issue Price" and "Total Shares" or "EPS" to see calculations.';
+                    resultsTitle.textContent = 'Analysis Results';
+                }
+            });
+
+            // --- Handle Clear Button ---
+            clearButton.addEventListener('click', () => {
+                // Reset the form fields
+                ipoForm.reset();
+                
+                // Clear the results
+                resultsList.innerHTML = '';
+                
+                // Reset the results title and show the default message
+                resultsTitle.textContent = 'Analysis Results';
+                resultsMessage.style.display = 'block';
+                resultsMessage.textContent = 'Please fill in the form and click "Analyze" to see the results.';
+            });
+            
+        });
+    </script>
+</body>
+</html>
+
